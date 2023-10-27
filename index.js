@@ -77,14 +77,4 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 });
 
-// client.on('messageCreate', (m) => {
-//     if (m.author.bot) {
-//         return
-//     }
-
-//     if (m.content == 'hello') {
-//         m.reply('Hey!')
-//     }
-// })
-
 client.login(process.env.TOKEN)

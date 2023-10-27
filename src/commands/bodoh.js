@@ -8,22 +8,32 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply()
 		const members = await getData(interaction)
-		if (members.length === 0) {
-			await interaction.editReply('Masukle channel dulu')
-		}
 
-		members.forEach(m => {
-			m.members.forEach(async ms => {
-				if (ms === interaction.user.id)  {
-					var randomWord = ['eh', 'hehe', 'hihi'];
-					var replyTo = m.members[Math.floor(Math.random()*m.members.length)];
-					var randomWordReply = randomWord[Math.floor(Math.random()*randomWord.length)];
-					await interaction.editReply(randomWordReply + ' ' + userMention(replyTo) + ' bodoh')
-				}
-			});
-		});
+		const getMember = await getMembers(members, interaction)
+
+		if (getMember.length === 0) {
+			await interaction.editReply('Masukle channel dulu')
+		} else {
+			var randomWord = ['eh', 'hehe', 'hihi'];
+			var replyTo = getMember[Math.floor(Math.random()*getMember.length)];
+			var randomWordReply = randomWord[Math.floor(Math.random()*randomWord.length)];
+			await interaction.editReply(randomWordReply + ' ' + userMention(replyTo) + ' bodoh')
+		}
 	},
 };
+
+async function getMembers(members, interaction) {
+	let mems = []
+	members.forEach(m => {
+		m.members.forEach(async ms => {
+			if (ms === interaction.user.id)  {
+				mems = m.members
+			}
+		});
+	});
+
+	return mems
+}
 
 async function getData(interaction) {
 	const channels = await interaction.member.guild.channels.fetch()
